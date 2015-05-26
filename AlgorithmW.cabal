@@ -1,5 +1,5 @@
 name:                AlgorithmW
-version:             0.1.0.2
+version:             0.1.0.3
 synopsis:            Example implementation of Algorithm W for Hindley-Milner 
 		     type inference.
 description:         Complete implementation of the classic
@@ -19,7 +19,7 @@ extra-source-files:  bibliography.bib README.md ChangeLog.md
 
 source-repository head
   type:     git
-  location: https://github.com/mgrabmueller/disassembler
+  location: https://github.com/mgrabmueller/AlgorithmW
 
 executable AlgorithmW
   main-is:             AlgorithmW.lhs

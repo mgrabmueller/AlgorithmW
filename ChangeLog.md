@@ -1,3 +1,6 @@
+# 0.1.0.3
+* Fix git repo link in .cabal file.
+
 # 0.1.0.2
 * Updated links in .cabal file to point to Github.
 
