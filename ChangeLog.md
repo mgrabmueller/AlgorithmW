@@ -1,3 +1,6 @@
+# 0.1.1.0
+- Fix to make it compile with GHC 7.10.1. Thanks to Franklin Chen.
+
 # 0.1.0.3
 * Fix git repo link in .cabal file.
 
