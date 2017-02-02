@@ -245,7 +245,7 @@ instantiate (Scheme vars t) = do  nvars <- mapM (\ _ -> newTyVar "a") vars
 This is the unification function for types.  The function |varBind|
 attempts to bind a type variable to a type and return that binding as
 a subsitution, but avoids binding a variable to itself and performs
-the occurs check.
+the occur check.
 %
 \begin{code}
 mgu :: Type -> Type -> TI Subst
@@ -358,7 +358,7 @@ test :: Exp -> IO ()
 test e =
     do  (res, _) <- runTI (typeInference Map.empty e)
         case res of
-          Left err  ->  putStrLn $ "error: " ++ err
+          Left err  ->  putStrLn $ show e ++ "\nerror: " ++ err
           Right t   ->  putStrLn $ show e ++ " :: " ++ show t
 \end{code}
 
