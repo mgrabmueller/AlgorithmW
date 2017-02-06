@@ -261,7 +261,7 @@ mgu t1 t2                    =  throwError $ "types do not unify: " ++ show t1 +
 
 varBind :: String -> Type -> TI Subst
 varBind u t  | t == TVar u           =  return nullSubst
-             | u `Set.member` ftv t  =  throwError $ "occur check fails: " ++ u ++
+             | u `Set.member` ftv t  =  throwError $ "occurs check fails: " ++ u ++
                                          " vs. " ++ show t
              | otherwise             =  return (Map.singleton u t)
 \end{code}
@@ -358,7 +358,7 @@ test :: Exp -> IO ()
 test e =
     do  (res, _) <- runTI (typeInference Map.empty e)
         case res of
-          Left err  ->  putStrLn $ "error: " ++ err
+          Left err  ->  putStrLn $ show e ++ "\nerror: " ++ err
           Right t   ->  putStrLn $ show e ++ " :: " ++ show t
 \end{code}
 
