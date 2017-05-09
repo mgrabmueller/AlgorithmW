@@ -215,12 +215,10 @@ data TIEnv = TIEnv  {}
 data TIState = TIState {  tiSupply :: Int,
                           tiSubst :: Subst}
 
-type TI a = ExceptT String (ReaderT TIEnv (StateT TIState IO)) a
+type TI a = ExceptT String (ReaderT TIEnv (State TIState)) a
 
-runTI :: TI a -> IO (Either String a, TIState)
-runTI t = 
-    do (res, st) <- runStateT (runReaderT (runExceptT t) initTIEnv) initTIState
-       return (res, st)
+runTI :: TI a -> (Either String a, TIState)
+runTI t = runState (runReaderT (runExceptT t) initTIEnv) initTIState
   where initTIEnv = TIEnv{}
         initTIState = TIState{tiSupply = 0,
                               tiSubst = Map.empty}
@@ -356,10 +354,10 @@ type, otherwise, it prints the error message.
 \begin{code}
 test :: Exp -> IO ()
 test e =
-    do  (res, _) <- runTI (typeInference Map.empty e)
-        case res of
-          Left err  ->  putStrLn $ show e ++ "\nerror: " ++ err
-          Right t   ->  putStrLn $ show e ++ " :: " ++ show t
+    let (res, _) = runTI (typeInference Map.empty e)
+    in case res of
+         Left err  ->  putStrLn $ show e ++ "\nerror: " ++ err
+         Right t   ->  putStrLn $ show e ++ " :: " ++ show t
 \end{code}
 
 \subsection{Main Program}
@@ -455,8 +453,8 @@ prScheme (Scheme vars t)  =   PP.text "All" PP.<+>
 
 test' :: Exp -> IO ()
 test' e =
-    do (res, _) <- runTI (bu Set.empty e)
-       case res of
+    let (res, _) = runTI (bu Set.empty e)
+    in case res of
          Left err -> putStrLn $ "error: " ++ err
          Right t  -> putStrLn $ show e ++ " :: " ++ show t
 \subsection{Collecting Constraints}
