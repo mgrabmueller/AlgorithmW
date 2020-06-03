@@ -220,11 +220,16 @@ runTI :: TI a -> (Either String a, TIState)
 runTI t = runState (runExceptT t) initTIState
   where initTIState = 0
 
-newTyVar :: String -> TI Type
-newTyVar prefix =
+newTyVar :: TI Type
+newTyVar =
     do  s <- get
         put (s + 1)
-        return (TVar  (prefix ++ show s))
+        return (TVar (reverse (toTyVar s)))
+  where 
+    toTyVar :: Int -> String
+    toTyVar c | c < 26    = [toEnum (97+c)]
+              | otherwise = let (n, r) = c `divMod` 26
+                            in (toEnum (97+r)) : toTyVar (n-1)
 \end{code}
 %
 The instantiation function replaces all bound type variables in a type
@@ -232,7 +237,7 @@ scheme with fresh type variables.
 %
 \begin{code}
 instantiate :: Scheme -> TI Type
-instantiate (Scheme vars t) = do  nvars <- mapM (\ _ -> newTyVar "a") vars
+instantiate (Scheme vars t) = do  nvars <- mapM (\ _ -> newTyVar) vars
                                   let s = Map.fromList (zip vars nvars)
                                   return $ apply s t
 \end{code}
@@ -286,13 +291,13 @@ ti (TypeEnv env) (EVar n) =
                            return (nullSubst, t)
 ti env (ELit l) = tiLit env l
 ti env (EAbs n e) =
-    do  tv <- newTyVar "a"
+    do  tv <- newTyVar
         let TypeEnv env' = remove env n
             env'' = TypeEnv (env' `Map.union` (Map.singleton n (Scheme [] tv)))
         (s1, t1) <- ti env'' e
         return (s1, TFun (apply s1 tv) t1)
 ti env (EApp e1 e2) =
-    do  tv <- newTyVar "a"
+    do  tv <- newTyVar
         (s1, t1) <- ti env e1
         (s2, t2) <- ti (apply s1 env) e2
         s3 <- mgu (apply s2 t1) (TFun t2 tv)
@@ -478,20 +483,20 @@ type Assum = [(String, Type)]
 type CSet = [Constraint]
 
 bu :: Set.Set String -> Exp -> TI (Assum, CSet, Type)
-bu m (EVar n) = do b <- newTyVar "b"
+bu m (EVar n) = do b <- newTyVar
                    return ([(n, b)], [], b)
-bu m (ELit (LInt _)) = do b <- newTyVar "b"
+bu m (ELit (LInt _)) = do b <- newTyVar
                           return ([], [CEquivalent b TInt], b)
-bu m (ELit (LBool _)) = do b <- newTyVar "b"
+bu m (ELit (LBool _)) = do b <- newTyVar
                            return ([], [CEquivalent b TBool], b)
 bu m (EApp e1 e2) =
     do (a1, c1, t1) <- bu m e1
        (a2, c2, t2) <- bu m e2
-       b <- newTyVar "b"
+       b <- newTyVar
        return (a1 ++ a2, c1 ++ c2 ++ [CEquivalent t1 (TFun t2 b)],
                b)
 bu m (EAbs x body) =
-    do b@(TVar vn) <- newTyVar "b"
+    do b@(TVar vn) <- newTyVar 
        (a, c, t) <- bu (vn `Set.insert` m) body
        return (a `removeAssum` x, c ++ [CEquivalent t' b | (x', t') <- a,
                                         x == x'], TFun b t)
