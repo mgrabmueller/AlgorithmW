@@ -496,7 +496,7 @@ bu m (EApp e1 e2) =
        return (a1 ++ a2, c1 ++ c2 ++ [CEquivalent t1 (TFun t2 b)],
                b)
 bu m (EAbs x body) =
-    do b@(TVar vn) <- newTyVar 
+    do ~b@(TVar vn) <- newTyVar 
        (a, c, t) <- bu (vn `Set.insert` m) body
        return (a `removeAssum` x, c ++ [CEquivalent t' b | (x', t') <- a,
                                         x == x'], TFun b t)
