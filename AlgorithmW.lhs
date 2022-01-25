@@ -13,7 +13,8 @@
 
 \title{\bf Algorithm W Step by Step}
 \author{Martin Grabm{\"u}ller}
-\date{Sep 26 2006 (Draft)}
+\date{Sep 26 2006\footnote{Updates to newer GHC versions and fixes in
+    2015, 2017, 2018 and 2020.}}
 
 \begin{document}
 \maketitle
@@ -43,8 +44,8 @@ tutorial are also inspired by \cite{Jones1999THiH}.
 This tutorial is the typeset output of a literate Haskell script and
 can be directly loaded into an Haskell interpreter in order to play
 with it.  This document in electronic form as well as the literate
-Haskell script are available from my homepage\footnote{Just search the
-web for my name.}
+Haskell script are available from
+Github\footnote{\url{https://github.com/mgrabmueller/AlgorithmW}}.
 
 This module was tested with version 6.6 of the Glasgow Haskell
 Compiler \cite{GHC2006GHCHomepage}
@@ -450,6 +451,12 @@ prScheme (Scheme vars t)  =   PP.text "All" PP.<+>
                                 (PP.punctuate PP.comma (map PP.text vars))
                               PP.<> PP.text "." PP.<+> prType t
 \end{code}
+
+\section*{Acknowledgements}
+
+Thanks to Franklin Chen, Kotolegokot, Christoph Höger and Richard
+Laughlin, who have contributed fixes and updates for newer GHC
+versions over the years.
 
 \end{document}
 
