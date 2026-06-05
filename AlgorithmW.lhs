@@ -348,6 +348,9 @@ e4  =  ELet "id" (EAbs "x" (EApp (EVar "x") (EVar "x")))
 e5  =  EAbs "m" (ELet "y" (EVar "m")
                  (ELet "x" (EApp (EVar "y") (ELit (LBool True)))
                        (EVar "x")))
+
+-- let f = \x -> (let y = x False in x True) in f
+e6  =  ELet "f" (EAbs "x" (ELet "y" (EApp (EVar "x") (ELit (LBool False))) (EApp (EVar "x") (ELit (LBool True))))) (EVar "f")
 \end{code}
 %
 This simple test function tries to infer the type for the given
@@ -372,7 +375,7 @@ type inference fails.
 
 \begin{code}
 main :: IO ()
-main = mapM_ test [e0, e1, e2, e3, e4, e5]
+main = mapM_ test [e0, e1, e2, e3, e4, e5, e6]
 \end{code}
 %
 This completes the implementation of the type inference algorithm.
