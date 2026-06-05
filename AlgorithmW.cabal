@@ -1,10 +1,10 @@
 name:                AlgorithmW
 version:             0.1.1.0
 synopsis:            Example implementation of Algorithm W for Hindley-Milner 
-		     type inference.
+         type inference.
 description:         Complete implementation of the classic
-		     algorithm W for Hindley-Milner polymorphic 
-		     type inference in Haskell.
+         algorithm W for Hindley-Milner polymorphic 
+         type inference in Haskell.
 homepage:            https://github.com/mgrabmueller/AlgorithmW
 bug-reports:         https://github.com/mgrabmueller/AlgorithmW/issues
 license:             BSD3

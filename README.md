@@ -16,7 +16,7 @@ ghci AlgorithmW.lhs
 
 # How to build
 
-On Debian 10, the following should work and create Transformers.pdf:
+On Debian 10, the following should work and create AlgorithmW.pdf:
 
 ```
 sudo apt install texlive
