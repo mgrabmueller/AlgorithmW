@@ -309,7 +309,7 @@ ti env (ELet x e1 e2) =
             t' = generalize (apply s1 env) t1
             env'' = TypeEnv (Map.insert x t' env')
         (s2, t2) <- ti (apply s1 env'') e2
-        return (s1 `composeSubst` s2, t2)
+        return (s2 `composeSubst` s1, t2)
 \end{code}
 %
 This is the main entry point to the type inferencer.  It simply calls
